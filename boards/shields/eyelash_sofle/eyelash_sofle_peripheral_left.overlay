@@ -38,3 +38,16 @@ nice_view_spi: &spi0 {
     pinctrl-names = "default", "sleep";
     cs-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
 };
+
+/* La nice!view se alimenta por P0.13 (EXT_POWER). El estado de ext_power se
+ * guarda en flash: si el RGB lo apago alguna vez, la pantalla arranca sin
+ * alimentacion y queda gris. Se reemplaza por un gpio-hog: siempre prendida. */
+/delete-node/ &{/ext-power};
+
+&gpio0 {
+    display_power_hog {
+        gpio-hog;
+        gpios = <13 GPIO_ACTIVE_HIGH>;
+        output-high;
+    };
+};
